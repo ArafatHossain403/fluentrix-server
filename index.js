@@ -29,6 +29,7 @@ async function run() {
 
         const classesCollection = client.db("fluentrixDb").collection("classes");
         const instructorsCollection = client.db("fluentrixDb").collection("instructors");
+        const  coursesCartCollection = client.db("fluentrixDb").collection("coursesCart");
 
         app.get('/instructors', async (req, res) => {
             const result = await instructorsCollection.find().sort({ rating: -1 }).toArray();
@@ -38,6 +39,16 @@ async function run() {
             const result = await classesCollection.find().sort({ availableSeats: 1 }).toArray();
             res.send(result);
         })
+
+        app.post('/coursesCart', async (req, res) => {
+            const item = req.body;
+            const result = await coursesCartCollection.insertOne(item);
+            res.send(result);
+          })
+
+
+
+
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
