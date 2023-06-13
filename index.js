@@ -30,14 +30,28 @@ async function run() {
         const classesCollection = client.db("fluentrixDb").collection("classes");
         const usersCollection = client.db("fluentrixDb").collection("users");
         const instructorsCollection = client.db("fluentrixDb").collection("instructors");
-        const  coursesCartCollection = client.db("fluentrixDb").collection("coursesCart");
+        const coursesCartCollection = client.db("fluentrixDb").collection("coursesCart");
 
 
         app.post('/users', async (req, res) => {
             const user = req.body;
+            const query = { email: user.email }
+            const existingUser = await usersCollection.findOne(query);
+
+            if (existingUser) {
+                return res.send({ message: 'user already exists' })
+
+            }
             const result = await usersCollection.insertOne(user);
             res.send(result);
-          })
+        })
+
+
+        app.get('/users', async (req, res) => {
+            const result = await usersCollection.find().toArray();
+            res.send(result);
+        })
+
 
         app.get('/instructors', async (req, res) => {
             const result = await instructorsCollection.find().sort({ rating: -1 }).toArray();
@@ -48,7 +62,7 @@ async function run() {
             res.send(result);
         })
         app.get('/coursesCart', async (req, res) => {
-            const result = await coursesCartCollection.find().toArray(); 
+            const result = await coursesCartCollection.find().toArray();
             res.send(result);
         })
 
@@ -56,13 +70,13 @@ async function run() {
             const item = req.body;
             const result = await coursesCartCollection.insertOne(item);
             res.send(result);
-          })
+        })
         app.delete('/coursesCart/:id', async (req, res) => {
-            const id= req.params.id;
-            const query = { _id: new ObjectId(id)};
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
             const result = await coursesCartCollection.deleteOne(query);
             res.send(result);
-          })
+        })
 
 
 
