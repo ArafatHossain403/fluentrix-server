@@ -10,7 +10,7 @@ app.use(express.json());
 
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ik2bdct.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -39,12 +39,23 @@ async function run() {
             const result = await classesCollection.find().sort({ availableSeats: 1 }).toArray();
             res.send(result);
         })
+        app.get('/coursesCart', async (req, res) => {
+            const result = await coursesCartCollection.find().toArray(); 
+            res.send(result);
+        })
 
         app.post('/coursesCart', async (req, res) => {
             const item = req.body;
             const result = await coursesCartCollection.insertOne(item);
             res.send(result);
           })
+        app.delete('/coursesCart/:id', async (req, res) => {
+            const id= req.params.id;
+            const query = { _id: new ObjectId(id)};
+            const result = await coursesCartCollection.deleteOne(query);
+            res.send(result);
+          })
+
 
 
 
