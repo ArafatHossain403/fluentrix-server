@@ -33,7 +33,11 @@ async function run() {
         const  coursesCartCollection = client.db("fluentrixDb").collection("coursesCart");
 
 
-        
+        app.post('/users', async (req, res) => {
+            const user = req.body;
+            const result = await usersCollection.insertOne(user);
+            res.send(result);
+          })
 
         app.get('/instructors', async (req, res) => {
             const result = await instructorsCollection.find().sort({ rating: -1 }).toArray();
