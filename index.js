@@ -28,8 +28,12 @@ async function run() {
         // await client.connect();
 
         const classesCollection = client.db("fluentrixDb").collection("classes");
+        const usersCollection = client.db("fluentrixDb").collection("users");
         const instructorsCollection = client.db("fluentrixDb").collection("instructors");
         const  coursesCartCollection = client.db("fluentrixDb").collection("coursesCart");
+
+
+        
 
         app.get('/instructors', async (req, res) => {
             const result = await instructorsCollection.find().sort({ rating: -1 }).toArray();
