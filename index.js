@@ -167,6 +167,11 @@ async function run() {
       const result = await classesCollection.insertOne(newItem);
       res.send(result);
     })
+    app.post('/coursesCart',  async (req, res) => {
+      const newItem = req.body;
+      const result = await coursesCartCollection.insertOne(newItem);
+      res.send(result);
+    })
 
     app.get('/coursesCart', async (req, res) => {
       
