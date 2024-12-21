@@ -167,13 +167,13 @@ async function run() {
       const result = await classesCollection.insertOne(newItem);
       res.send(result);
     })
-    app.post('/coursesCart',  async (req, res) => {
-      const newItem = req.body;
-      const result = await coursesCartCollection.insertOne(newItem);
-      res.send(result);
-    })
+    // app.post('/coursesCart',  async (req, res) => {
+    //   const newItem = req.body;
+    //   const result = await coursesCartCollection.insertOne(newItem);
+    //   res.send(result);
+    // })
 
-    app.get('/coursesCart', async (req, res) => {
+    app.get('/coursesCart',verifyJWT, async (req, res) => {
       
       const email = req.query.email;
       if (!email) {
@@ -192,7 +192,7 @@ async function run() {
 
     });
 
-    app.post('/coursesCart',verifyJWT, async (req, res) => {
+    app.post('/coursesCart', async (req, res) => {
       const item = req.body;
       const result = await coursesCartCollection.insertOne(item);
       res.send(result);
